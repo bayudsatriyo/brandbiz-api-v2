@@ -13,6 +13,7 @@
     },
     "rules": {
         "@typescript-eslint/no-misused-promises": false,
-        "@typescript-eslint/unbound-method": false
+        "@typescript-eslint/unbound-method": false,
+        "linebreak-style": "off"
     }
 }

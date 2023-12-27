@@ -1,5 +1,6 @@
 import express from "express";
 import LearningHandler from "../handler/learninghandler";
+import ModulHandler from "../handler/modulhandler";
 import multer from 'multer'
 import { Request } from "express";
 
@@ -18,8 +19,17 @@ const storage = multer.diskStorage({
   const upload = multer({ storage : storage });
 
   const learningController = new LearningHandler()
+  const modulController = new ModulHandler()
   const learningRoutes = express.Router()
 
-  learningRoutes.route('/brandbiz/learning').post(upload.single('attachment'), learningController.addLearningHandler)
+
+  // Learning Routes
+  learningRoutes.route('/brandbiz/learning').post(upload.single('attachment'), learningController.addLearningHandler).get(learningController.getAllLearningPath)
   learningRoutes.route('/brandbiz/learning/:image').get(learningController.getImage)
+  learningRoutes.route('/brandbiz/learning/:idLearning').delete(learningController.deleteLearningpath)
+
+  // Modul Routes
+  learningRoutes.route('/brandbiz/modul/:idLearning').post(modulController.addModul).delete(modulController.deleteModulHandler)
+  learningRoutes.route('/brandbiz/modul').put(modulController.updateModulHandler)
+
   export default learningRoutes

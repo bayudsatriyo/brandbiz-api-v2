@@ -37,6 +37,33 @@ class LearningHandler {
             next(e)
         }
     }
+
+    async getAllLearningPath (_req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const dataLearning = await learningService.getAllLearningpath()
+
+            res.status(200).json({
+                data: dataLearning
+            })
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async deleteLearningpath(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const id = parseInt(req.params.idLearning)
+            
+            const judul: string = await learningService.deleteLearningPath(id)
+
+            res.status(200).json({
+                status: 'DELETED',
+                message: `Learning path ${judul} telah dihapus`
+            })
+        } catch (e) {
+            next(e)
+        }
+    }
 }
 
 export default LearningHandler
