@@ -4,7 +4,7 @@ import prismaClient from '../applications/database'
 import ResponseError from '../exceptions/ResponseError'
 import validate from '../validations/validate'
 import usersValidation from '../validations/usersValidation'
-import { User } from '@prisma/client'
+import { User } from '../../node_modules/.prisma/client/index'
 
 interface UserResponse {
   email: string

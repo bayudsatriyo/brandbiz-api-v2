@@ -1,6 +1,6 @@
 import prismaClient from "../applications/database";
 import { Request, Response, NextFunction } from "express";
-import { User } from "@prisma/client";
+import { User } from "../../node_modules/.prisma/client/index";
 
 // deklarasikan namespace global Express
 declare global {
