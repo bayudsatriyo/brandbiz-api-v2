@@ -4,15 +4,7 @@ import prismaClient from '../applications/database'
 import ResponseError from '../exceptions/ResponseError'
 import validate from '../validations/validate'
 import usersValidation from '../validations/usersValidation'
-
-export interface User {
-  email: string
-  username: string
-  fullname: string
-  password: string
-  alamat?: string
-  role?: string
-}
+import { User } from '@prisma/client'
 
 interface UserResponse {
   email: string
@@ -24,9 +16,18 @@ interface TokenUser {
   token: string
 }
 
-export interface authenticationUser {
+interface authenticationUser {
   username: string, 
   password: string
+}
+
+interface UserProfile {
+  email: string
+  username: string
+  fullname: string
+  alamat?: string | null
+  role?: string | null
+  profileUrl?: string | null
 }
 
 const addUsers = async (users: User): Promise<UserResponse> => {
@@ -39,7 +40,7 @@ const addUsers = async (users: User): Promise<UserResponse> => {
   })
 
   if (cekUser === 1) {
-    throw new ResponseError(404, 'Username atau email sudah digunakan')
+    throw new ResponseError(400, 'Username atau email sudah digunakan')
   }
 
   userData.password = await bcrypt.hash(userData.password, 10)
@@ -70,7 +71,7 @@ const authentication = async (users: authenticationUser): Promise<TokenUser> => 
     })
 
     if(cekUser === null || cekUser === undefined){
-      throw new ResponseError(404, 'Username atau password salah')
+      throw new ResponseError(400, 'Username atau password salah')
     }
     console.log(cekUser.password)
     console.log(userData.password)
@@ -96,4 +97,74 @@ const authentication = async (users: authenticationUser): Promise<TokenUser> => 
     return UserToken as TokenUser
 }
 
-export default { addUsers, authentication }
+const getUserByUsername = async (username: string): Promise<UserProfile> => {
+  validate(usersValidation.emailorusernameValidation, username)
+
+  const cekUser = await prismaClient.user.count({
+    where: {
+      username: username
+    }
+  })
+
+  if(!cekUser){
+    throw new ResponseError(404, 'User tidak ditemukan')
+  }
+
+  const dataUser = await prismaClient.user.findUnique({
+    where: {
+      username: username
+    },
+    select:{
+      username: true,
+      email: true,
+      fullname: true,
+      alamat: true,
+      role: true,
+      profileUrl: true
+    }
+  })
+
+  return dataUser as UserProfile
+}
+
+const updateUser = async (userdata: UserProfile, username: string): Promise<UserProfile> => {
+  const dataUser = validate(usersValidation.updateValidation, userdata)
+
+  const updateUser = await prismaClient.user.update({
+    where: {
+      username: username
+    },
+    data: dataUser,
+    select: {
+      username: true,
+      email: true,
+      fullname: true,
+      role: true,
+      profileUrl: true
+    }
+  })
+
+  return updateUser as UserProfile
+}
+
+const logoutUser = async (username: string): Promise<string> => {
+  validate(usersValidation.emailorusernameValidation, username)
+
+  const deleteToken = await prismaClient.user.update({
+    where: {
+      username: username,
+    },
+    data: {
+      token: null,
+    },
+    select: {
+      username: true
+    }
+  })
+
+  return deleteToken.username as string
+}
+
+
+
+export default { addUsers, authentication, getUserByUsername, updateUser, logoutUser }
