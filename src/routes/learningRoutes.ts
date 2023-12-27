@@ -27,6 +27,7 @@ const storage = multer.diskStorage({
   learningRoutes.route('/brandbiz/learning').post(upload.single('attachment'), learningController.addLearningHandler).get(learningController.getAllLearningPath)
   learningRoutes.route('/brandbiz/learning/:image').get(learningController.getImage)
   learningRoutes.route('/brandbiz/learning/:idLearning').delete(learningController.deleteLearningpath)
+  learningRoutes.route('/brandbiz/learningpath/:idLearning').get(learningController.getLearningPathById)
 
   // Modul Routes
   learningRoutes.route('/brandbiz/modul/:idLearning').post(modulController.addModul).delete(modulController.deleteModulHandler)

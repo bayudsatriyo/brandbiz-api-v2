@@ -50,6 +50,21 @@ class LearningHandler {
         }
     }
 
+    async getLearningPathById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const idLearningPath = parseInt(req.params.idLearning)
+
+        const result = await learningService.getLarningPathById(idLearningPath)
+
+        res.status(200).json({
+            status: 'SUCCESS',
+            data: result
+        })
+        } catch (e) {
+            next(e)
+        }
+    }
+
     async deleteLearningpath(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = parseInt(req.params.idLearning)
