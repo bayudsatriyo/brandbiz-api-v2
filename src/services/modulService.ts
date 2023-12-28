@@ -5,9 +5,12 @@ import { Modul } from "@prisma/client";
 import learningValidation from "../validations/learningValidation";
 import ResponseError from "../exceptions/ResponseError";
 
-const addModul = async (idLearning: number | undefined, judul: string): Promise<Modul> => {
-    const judulModul = await validate(modulValidations.judulModulValidation, judul)
+const addModul = async (idLearning: number | undefined, data: Modul, image: string | undefined): Promise<Modul> => {
+    const dataModul = validate(modulValidations.addModulValidation, data)
     const IdLearning = validate(learningValidation.idLearningpath, idLearning)
+    if(image !== undefined){
+        dataModul.gambar = `http://localhost:8080/brandbiz/modul/${image}`
+    }
 
     const cekLearning = await prismaClient.learningpath.count({
         where: {
@@ -21,7 +24,7 @@ const addModul = async (idLearning: number | undefined, judul: string): Promise<
 
     const cekModul = await prismaClient.modul.count({
         where: {
-            judul: judulModul
+            judul: dataModul.judul
         }
     })
 
@@ -32,7 +35,11 @@ const addModul = async (idLearning: number | undefined, judul: string): Promise<
     
     const addModul = await prismaClient.modul.create({
         data: {
-            judul: judulModul,
+            judul: dataModul.judul,
+            inti_materi: dataModul.inti_materi,
+            tambahan: dataModul.tambahan,
+            gambar: dataModul.gambar,
+            video: dataModul.video,
             learning_id: IdLearning
         },
     })
@@ -40,10 +47,12 @@ const addModul = async (idLearning: number | undefined, judul: string): Promise<
     return addModul as Modul
 }
 
-const updateModul = async (judul: string, idmodul: number) => {
-    const judulModul = validate(modulValidations.judulModulValidation, judul)
+const updateModul = async (data: Modul, idmodul: number, image: string | undefined) => {
+    const dataModul = validate(modulValidations.addModulValidation, data)
     const idModul = validate(learningValidation.idLearningpath, idmodul)
-
+    if(image !== undefined){
+        dataModul.gambar = `http://localhost:8080/brandbiz/modul/${image}`
+    }
     const cekModul = await prismaClient.modul.count({
         where: {
             id: idModul
@@ -58,9 +67,7 @@ const updateModul = async (judul: string, idmodul: number) => {
         where: {
             id: idModul
         },
-        data: {
-            judul: judulModul
-        }
+        data: dataModul
     })
 }
 

@@ -30,7 +30,8 @@ const storage = multer.diskStorage({
   learningRoutes.route('/brandbiz/learningpath/:idLearning').get(learningController.getLearningPathById)
 
   // Modul Routes
-  learningRoutes.route('/brandbiz/modul/:idLearning').post(modulController.addModul).delete(modulController.deleteModulHandler)
-  learningRoutes.route('/brandbiz/modul').put(modulController.updateModulHandler)
+  learningRoutes.route('/brandbiz/modul/:idLearning').post(upload.single('attachment'), modulController.addModul).delete(modulController.deleteModulHandler)
+  learningRoutes.route('/brandbiz/modul/:idModul').put(upload.single('attachment'), modulController.updateModulHandler)
+  learningRoutes.route('/brandbiz/modul/:image').get(modulController.getGambarMateri)
 
   export default learningRoutes
