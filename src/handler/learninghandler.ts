@@ -1,26 +1,38 @@
-import learningService from "../services/learningService";
+import learningService, { learningpath } from "../services/learningService";
 // import { dirname } from "path";
 // import { fileURLToPath } from "url";
 
 import path from "path";
 import { type Response, type Request, type NextFunction } from 'express'
+import * as fs from 'fs'
 
 class LearningHandler {
     async addLearningHandler (req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { judul } = req.body;
             const filename = req.file;
-
-            console.log(judul)
             console.log(filename)
+            
+            const dataLearning: learningpath = {
+                judul: judul
+            };
+            
 
-            const result = await learningService.addLearning(judul, filename?.originalname)
+            if(filename?.originalname !== undefined){
+                dataLearning.imageUrl = filename.originalname
+            }
+
+            console.log(req.body)
+            const result = await learningService.addLearning(dataLearning, req.format)
 
             res.status(201).json({
                 status: 'CREATED',
                 data: result
             })
         } catch (e) {
+            if(req.file !== undefined){
+                fs.unlinkSync(req.file.path);
+            }
             next(e)
         }
     }

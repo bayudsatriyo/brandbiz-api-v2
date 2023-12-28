@@ -7,12 +7,24 @@ import { Request } from "express";
 type DestinationCallback = (error: Error | null, destination: string) => void
 type FilenameCallback = (error: Error | null, filename: string) => void
 
+declare global {
+  namespace Express {
+    // tambahkan properti user pada tipe Request
+    interface Request {
+      date: Date
+      format: string
+    }
+  }
+}
+
 const storage = multer.diskStorage({
     destination(_req: Request, _file: Express.Multer.File, cb: DestinationCallback) {
       cb(null, 'src/uploads');
     },
-    filename(_req: Request, file: Express.Multer.File, cb: FilenameCallback) {
-      cb(null, `${file.originalname}`);
+    filename(req: Request,file: Express.Multer.File, cb: FilenameCallback) {
+        req.date = new Date()
+        req.format = req.date.toLocaleTimeString("id-ID", {hour12: false});
+        cb(null, `${req.format}-${file.originalname}`);
     },
   });
   

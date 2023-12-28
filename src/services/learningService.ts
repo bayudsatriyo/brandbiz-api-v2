@@ -4,33 +4,33 @@ import prismaClient from "../applications/database";
 import { Learningpath } from "@prisma/client";
 import ResponseError from "../exceptions/ResponseError";
 
-interface learningpath {
+export interface learningpath {
     judul: string,
-    imageUrl: string,
+    imageUrl?: string
 }
 
-const addLearning = async (judulLearning: string, filename: string | undefined): Promise<learningpath> => {
-    const judul = validate(learningValidation.addLearningValidation, judulLearning)
-    if(filename === undefined){
-        const Learningdata = await prismaClient.learningpath.create({
-            data: {
-                judul: judul,
-                imageUrl: "no image"
-            }
-        })
-
-        return Learningdata as learningpath
-    }
-    const fileData = validate(learningValidation.addLearningValidation, filename)
-
-    const Learningdata = await prismaClient.learningpath.create({
-        data: {
-            judul: judul,
-            imageUrl: `http://localhost:8080/brandbiz/learning/${fileData}`
+const addLearning = async (data: learningpath, format: string): Promise<Learningpath> => {
+    const dataLearning = validate(learningValidation.addLearningValidation, data)
+    
+    // const fileData = validate(learningValidation.addLearningValidation, filename)
+    const cekJudul = await prismaClient.learningpath.findUnique({
+        where: {
+            judul: dataLearning.judul
         }
     })
 
-    return Learningdata as learningpath
+    if(cekJudul){
+        throw new ResponseError(400, 'Judul sudah ada, silahkan ganti judul lain')
+    }
+    
+    const Learningdata = await prismaClient.learningpath.create({
+        data: {
+            judul: dataLearning.judul,
+            imageUrl: `http://localhost:8080/brandbiz/learning/${format}-${dataLearning.imageUrl}`
+        }
+    })
+
+    return Learningdata as Learningpath
 }
 
 

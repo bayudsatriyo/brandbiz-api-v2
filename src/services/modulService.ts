@@ -5,6 +5,18 @@ import { Modul } from "@prisma/client";
 import learningValidation from "../validations/learningValidation";
 import ResponseError from "../exceptions/ResponseError";
 
+
+const cekJudul = async (judul: string) => {
+    const cekModul = await prismaClient.modul.count({
+        where: {
+            judul: judul
+        }
+    })
+
+    if(cekModul === 1){
+        throw new ResponseError(403, 'Judul modul sudah ada, silahkan ganti judul lain')
+    }
+}
 const addModul = async (idLearning: number | undefined, data: Modul, image: string | undefined): Promise<Modul> => {
     const dataModul = validate(modulValidations.addModulValidation, data)
     const IdLearning = validate(learningValidation.idLearningpath, idLearning)
@@ -22,15 +34,7 @@ const addModul = async (idLearning: number | undefined, data: Modul, image: stri
         throw new ResponseError(404, 'Learning Path tidak ditemukan')
     }
 
-    const cekModul = await prismaClient.modul.count({
-        where: {
-            judul: dataModul.judul
-        }
-    })
-
-    if(cekModul === 1){
-        throw new ResponseError(403, 'Judul modul sudah ada, silahkan ganti judul lain')
-    }
+    await cekJudul(dataModul.judul)
 
     
     const addModul = await prismaClient.modul.create({
@@ -62,6 +66,8 @@ const updateModul = async (data: Modul, idmodul: number, image: string | undefin
     if(!cekModul){
         throw new ResponseError(404, 'id tidak ditemukan')
     }
+
+    await cekJudul(dataModul.judul)
 
     return prismaClient.modul.update({
         where: {

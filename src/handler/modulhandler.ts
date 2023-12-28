@@ -1,13 +1,14 @@
 import modulService from "../services/modulService";
 import { Request, Response, NextFunction } from "express";
 import path from "path";
+import * as fs from 'fs'
 
 class ModulHandler {
     async addModul(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const IdLearning = parseInt(req.params.idLearning)
             const data = req.body
-            const image = req.file?.originalname
+            const image = `${req.format}-${req.file?.originalname}`
 
             const result = await modulService.addModul(IdLearning, data, image)
 
@@ -16,6 +17,9 @@ class ModulHandler {
                 data: result
             })
         } catch (e) {
+            if(req.file !== undefined){
+                fs.unlinkSync(req.file.path);
+            }
             next(e)
         }
     }
@@ -37,7 +41,7 @@ class ModulHandler {
         try {
             const data = req.body
             const idModul = parseInt(req.params.idModul)
-            const image = req.file?.originalname
+            const image = `${req.format}-${req.file?.originalname}`
 
             const result = await modulService.updateModul(data, idModul, image)
 
@@ -46,6 +50,9 @@ class ModulHandler {
                 data: result
             })
         } catch (e) {
+            if(req.file !== undefined){
+                fs.unlinkSync(req.file.path);
+            }
             next(e)
         }
     }
