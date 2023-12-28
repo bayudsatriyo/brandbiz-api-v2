@@ -32,6 +32,7 @@ model Learningpath {
   imageUrl String @db.Text
   users userhaslearning[]
   modul Modul[]
+  kuis Kuis[]
 }
 
 model userhaslearning {
@@ -52,6 +53,19 @@ model Modul {
   tambahan String? @db.Text
   gambar String? @db.Text
   video String? @db.Text
+  learning Learningpath @relation(fields: [learning_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  learning_id Int
+}
+
+
+model Kuis {
+  id Int @id @default(autoincrement())
+  soal String @db.Text
+  opsi_a String @db.Text
+  opsi_b String @db.Text
+  opsi_c String @db.Text
+  opsi_d String @db.Text
+  jawaban String @db.Char(1)
   learning Learningpath @relation(fields: [learning_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   learning_id Int
 }

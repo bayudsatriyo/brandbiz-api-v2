@@ -3,6 +3,7 @@ import LearningHandler from "../handler/learninghandler";
 import ModulHandler from "../handler/modulhandler";
 import multer from 'multer'
 import { Request } from "express";
+import KuisHandler from "../handler/kuishandler";
 
 type DestinationCallback = (error: Error | null, destination: string) => void
 type FilenameCallback = (error: Error | null, filename: string) => void
@@ -32,6 +33,7 @@ const storage = multer.diskStorage({
 
   const learningController = new LearningHandler()
   const modulController = new ModulHandler()
+  const kuisController = new KuisHandler()
   const learningRoutes = express.Router()
 
 
@@ -45,5 +47,11 @@ const storage = multer.diskStorage({
   learningRoutes.route('/brandbiz/modul/:idLearning').post(upload.single('attachment'), modulController.addModul).delete(modulController.deleteModulHandler)
   learningRoutes.route('/brandbiz/modul/:idModul').put(upload.single('attachment'), modulController.updateModulHandler)
   learningRoutes.route('/brandbiz/modul/:image').get(modulController.getGambarMateri)
+
+
+  // Kuis Routes
+  learningRoutes.route('/brandbiz/kuis').post(kuisController.addKuis)
+  learningRoutes.route('/brandbiz/kuis/:id').put(kuisController.updateKuisByIdHandler).delete(kuisController.deleteKuisById)
+
 
   export default learningRoutes

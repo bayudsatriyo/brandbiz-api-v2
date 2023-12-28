@@ -5,6 +5,7 @@ import ResponseError from '../exceptions/ResponseError'
 import validate from '../validations/validate'
 import usersValidation from '../validations/usersValidation'
 import { User } from '../../node_modules/.prisma/client/index'
+import learningValidation from '../validations/learningValidation'
 
 interface UserResponse {
   email: string
@@ -165,6 +166,39 @@ const logoutUser = async (username: string): Promise<string> => {
   return deleteToken.username as string
 }
 
+const userGetLearning =async (useremail: string, idLearning: number) => {
+  const Useremail = validate(usersValidation.emailorusernameValidation, useremail)
+  const IdLearning = validate(learningValidation.idLearningpath, idLearning)
+
+  const cekLearning = await prismaClient.learningpath.count({
+    where: {
+      id: IdLearning
+    }
+  })
+
+  if(!cekLearning){
+    throw new ResponseError(404, 'Learning Path tidak ditemukan')
+  }
+
+  return prismaClient.userhaslearning.create({
+    data: {
+      useremail: Useremail,
+      learningId: IdLearning
+    },
+    select: {
+      useremail: true,
+      learningId: true
+    }
+  })
+}
 
 
-export default { addUsers, authentication, getUserByUsername, updateUser, logoutUser }
+
+export default { 
+      addUsers, 
+      authentication, 
+      getUserByUsername, 
+      updateUser, 
+      logoutUser, 
+      userGetLearning 
+}

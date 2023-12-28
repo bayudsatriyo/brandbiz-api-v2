@@ -22,7 +22,7 @@ const addLearning = async (data: learningpath, format: string): Promise<Learning
     if(cekJudul){
         throw new ResponseError(400, 'Judul sudah ada, silahkan ganti judul lain')
     }
-    
+
     const Learningdata = await prismaClient.learningpath.create({
         data: {
             judul: dataLearning.judul,
@@ -60,7 +60,9 @@ const getLarningPathById = async (id: number) => {
         select: {
             id: true,
             judul: true,
-            modul: true
+            imageUrl: true,
+            modul: true,
+            kuis: true
         }
     })
 }

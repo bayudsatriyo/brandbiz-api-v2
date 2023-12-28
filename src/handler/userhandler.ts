@@ -1,6 +1,6 @@
 import userService from '../services/userService'
 import { type Response, type Request, type NextFunction } from 'express'
-
+import * as fs from 'fs'
 class Userhandler {
   async registerUser (req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -47,10 +47,46 @@ class Userhandler {
     }
   }
 
+  deleteFile = (fileName: string, extensions: Array<string>) => {
+    // membuat loop untuk setiap ekstensi
+    for (let ext of extensions) {
+      // membuat path lengkap dari file dengan nama dan ekstensi
+      let filePath = `./profile/${fileName}.${ext}`;
+      // menggunakan metode fs.unlink untuk menghapus file
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log('gagal menghapus gambar')
+        }
+      });
+    }
+  }
+
   async updateUserHandler (req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const dataUser = req.body
       const username = req.user.username
+      let image: string
+      console.log(req.file)
+      if(req.file !== undefined){
+        image = req.format
+        dataUser.profileUrl = `http://localhost:8080/brandbiz/user/image/${image}`
+      }else{
+        for (let ext of ['jpg', 'png', 'jpeg']) {
+          // membuat path lengkap dari file dengan nama dan ekstensi
+          let filePath = `src/profile/${username}.${ext}`;
+          // menggunakan metode fs.unlink untuk menghapus file
+          fs.unlink(filePath, (err) => {
+            if(err){
+              console.log('sedang mencari')
+            }
+            console.log('path/file.txt was deleted');
+          });
+        }
+        console.log('sudah dihapus')
+        dataUser.profileUrl = null
+      }
+
+      console.log(dataUser)
 
       const result = await userService.updateUser(dataUser, username)
 
@@ -59,6 +95,9 @@ class Userhandler {
         data: result
       })
     } catch (e) {
+      if(req.file !== undefined){
+        fs.unlinkSync(req.file.path);
+      }
       next(e)
     }
   }
@@ -75,6 +114,22 @@ class Userhandler {
       })
     } catch (e) {
       next(e)
+    }
+  }
+
+  async usergetlearningHandler(req: Request, res: Response, next: NextFunction) {
+    try {
+        const useremail = req.user.email
+        const idLearning = parseInt(req.params.idLearning)
+
+        const result = await userService.userGetLearning(useremail, idLearning)
+
+        res.status(200).json({
+            status: 'SUCCESS',
+            data: result
+        })
+    } catch (e) {
+        next(e)
     }
   }
 }
