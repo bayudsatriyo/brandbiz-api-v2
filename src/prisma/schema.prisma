@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 
@@ -56,6 +57,8 @@ model Modul {
   video String? @db.Text
   learning Learningpath @relation(fields: [learning_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   learning_id Int
+
+  @@index([learning_id])
 }
 
 model Kuis {
@@ -68,6 +71,8 @@ model Kuis {
   jawaban String @db.Char(1)
   learning Learningpath @relation(fields: [learning_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   learning_id Int
+
+  @@index([learning_id])
 }
 
 model Feedback {
@@ -75,4 +80,6 @@ model Feedback {
   note String @db.Text
   user User @relation(fields: [username], references: [username])
   username String
+
+  @@index([username])
 }

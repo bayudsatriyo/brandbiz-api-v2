@@ -25,6 +25,13 @@ const userRoutes = express.Router()
 const controlUser = new Userhandler()
 
 userRoutes.use(authMiddleware)
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: The User API
+ */
+
 
 // users Route
 userRoutes.route('/brandbiz/user')
