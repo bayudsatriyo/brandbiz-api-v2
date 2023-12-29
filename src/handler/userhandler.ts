@@ -132,6 +132,41 @@ class Userhandler {
         next(e)
     }
   }
+
+  async userUpdateSkor(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useremail = req.user.email
+      const idLearning = parseInt(req.params.idLearning)
+      const skorUser = parseInt(req.params.skor)
+
+      const result = await userService.updateSkorLearningPath(useremail, idLearning, skorUser)
+
+      res.status(200).json({
+        status: 'UPDATED',
+        data: result
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  async userAddFeedbackHandler(req: Request, res: Response, next: NextFunction) {
+    try {
+      const username = req.user.username
+      const note = req.body.note
+
+      console.log(username)
+      console.log(note)
+      const result = await userService.userAddFeedback(username, note)
+
+      res.status(201).json({
+        status: 'SUCCESS',
+        data: result
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
 }
 
 export default Userhandler

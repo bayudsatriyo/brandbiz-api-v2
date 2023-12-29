@@ -26,6 +26,15 @@ const updateValidation = Joi.object({
   profileUrl: Joi.string().optional().allow(null)
 })
 
+const skorValidation = Joi.number().positive().min(1).required()
+
+const feedbackValidation = Joi.string().required()
+
 export default {
-  addUsersValidation, loginUserValidation, emailorusernameValidation, updateValidation
+  addUsersValidation, 
+  loginUserValidation, 
+  emailorusernameValidation, 
+  updateValidation, 
+  feedbackValidation,
+  skorValidation
 }

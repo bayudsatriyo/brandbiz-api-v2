@@ -22,6 +22,7 @@ model User {
   profileUrl  String? @db.Text
   token String? @db.VarChar(100)
   learningpath userhaslearning[]
+  feedback Feedback[]
 
   @@map("users")
 }
@@ -37,9 +38,9 @@ model Learningpath {
 
 model userhaslearning {
   user User @relation(fields: [useremail], references: [email], onDelete: Cascade, onUpdate: Cascade)
-  useremail String
+  useremail String @unique
   learningpath Learningpath @relation(fields: [learningId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  learningId Int 
+  learningId Int @unique
   assignedAt DateTime @default(now())
   skor Int?
   
@@ -57,7 +58,6 @@ model Modul {
   learning_id Int
 }
 
-
 model Kuis {
   id Int @id @default(autoincrement())
   soal String @db.Text
@@ -68,4 +68,11 @@ model Kuis {
   jawaban String @db.Char(1)
   learning Learningpath @relation(fields: [learning_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   learning_id Int
+}
+
+model Feedback {
+  id Int @id @default(autoincrement())
+  note String @db.Text
+  user User @relation(fields: [username], references: [username])
+  username String
 }

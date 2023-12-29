@@ -192,6 +192,48 @@ const userGetLearning =async (useremail: string, idLearning: number) => {
   })
 }
 
+const updateSkorLearningPath = async (useremail: string, idLearning: number, skor: number) => {
+  const Useremail = validate(usersValidation.emailorusernameValidation, useremail)
+  const IdLearning = validate(learningValidation.idLearningpath, idLearning)
+  const skorUser = validate(usersValidation.skorValidation, skor)
+
+  const cekLearning = await prismaClient.userhaslearning.findFirst({
+    where: {
+      useremail: Useremail,
+      learningId: IdLearning
+    }
+  })
+
+  if(!cekLearning){
+    throw new ResponseError(404, 'Learning path tidak ada')
+  }
+
+  return prismaClient.userhaslearning.update({
+    where: {
+      useremail: Useremail,
+      learningId: IdLearning
+    },
+    data: {
+      skor: skorUser
+    }
+  })
+}
+
+const userAddFeedback = async (username: string, note: string) => {
+  const noteFeedback = validate(usersValidation.feedbackValidation, note)
+  
+  return prismaClient.feedback.create({
+    data: {
+      note: noteFeedback,
+      username: username
+    },
+    select: {
+      username: true,
+      note: true
+    }
+  })
+}
+
 
 
 export default { 
@@ -200,5 +242,7 @@ export default {
       getUserByUsername, 
       updateUser, 
       logoutUser, 
-      userGetLearning 
+      userGetLearning,
+      updateSkorLearningPath,
+      userAddFeedback
 }
