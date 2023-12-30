@@ -34,12 +34,15 @@ import Joi from 'joi'
  *    addUsersResponse:
  *      type: object
  *      properties:
- *        email: 
+ *        status:
  *          type: string
- *        username: 
- *          type: string
- *        fullname: 
- *          type: string
+ *          default: CREATED
+ *        data:
+ *          type: object
+ *          example:
+ *            email: marryjane@gmail.com
+ *            username: marryjane
+ *            fullname: marry jane d
  *    GetUserByIdResponse:
  *      type: object
  *      properties:
@@ -128,13 +131,69 @@ import Joi from 'joi'
  *          default: SUCCESS
  *        data:
  *          type: object
- *          default:
- *            useremail:
- *              type: string
- *              default: marryjane@gmail.com
- *            learningId:
- *              type: number
- *              example: 2
+ *          example:
+ *            useremail: marryjane@gmail.com
+ *            learningId: 2
+ *    learningNotFound:
+ *      type: object
+ *      properties:
+ *        error:
+ *          type: string
+ *          default: Learning Path tidak ditemukan
+ *    learningHasGated:
+ *      type: object
+ *      properties:
+ *        error:
+ *          type: string
+ *          default: Learning Path sudah diambil
+ *    usergetSkorlearning:
+ *      type: object
+ *      properties:
+ *        status:
+ *          type: string
+ *          default: SUCCESS
+ *        data:
+ *          type: string
+ *          default: Skor telah diupdate
+ *    authentication:
+ *      type: object
+ *      required:
+ *        - username
+ *        - password
+ *      properties:
+ *        username: 
+ *          type: string
+ *          example: marryjane
+ *        password:
+ *          type: string
+ *          example: stringPassword123
+ *    ErrorAuth:
+ *      type: object
+ *      properties:
+ *        error: 
+ *          type: string
+ *          default: Username atau Password salah
+ *    UserHasBeenAdd:
+ *      type: object
+ *      properties:
+ *        error: 
+ *          type: string
+ *          default: Username atau Email sudah digunakan
+ *    feedbackresponse:
+ *      type: object
+ *      properties:
+ *        status:
+ *          type: string
+ *          example: CREATED
+ *        note:
+ *          type: string
+ *          example: Feedback telah ditambahkan
+ *    feedback:
+ *      type: object
+ *      properties:
+ *        note:
+ *          type: string
+ *          example: aplikasinya cukup responsive
  *          
  */ 
 

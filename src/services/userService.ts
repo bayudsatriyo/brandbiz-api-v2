@@ -166,7 +166,7 @@ const logoutUser = async (username: string): Promise<string> => {
   return deleteToken.username as string
 }
 
-const userGetLearning =async (useremail: string, idLearning: number) => {
+const userGetLearning = async (useremail: string, idLearning: number) => {
   const Useremail = validate(usersValidation.emailorusernameValidation, useremail)
   const IdLearning = validate(learningValidation.idLearningpath, idLearning)
 
@@ -188,7 +188,7 @@ const userGetLearning =async (useremail: string, idLearning: number) => {
   })
 
   if(cekUserLearning >= 1){
-    throw new ResponseError(401, 'Learning path sudah diambil')
+    throw new ResponseError(403, 'Learning path sudah diambil')
   }
 
   return prismaClient.userhaslearning.create({

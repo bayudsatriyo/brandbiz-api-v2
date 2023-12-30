@@ -8,7 +8,7 @@ const options: swaggerJsdoc.Options = {
       info: {
         title: "BrandBiz Rest API",
         version: "1.0.0",
-        description: "Rest Api for Brandbiz website",
+        description: "Rest Api for Brandbiz website || By: Uciha Bayu",
         contact: {
           author: "Bayu Dwi Satriyo",
           email: "bayudsatriyo@gmail.com",
@@ -22,7 +22,7 @@ const options: swaggerJsdoc.Options = {
         },
       ],
     },
-    apis: ["./src/routes/*ts", "./src/validations/*ts"],
+    apis: ["./src/Doc/*ts", "./src/validations/*ts"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
