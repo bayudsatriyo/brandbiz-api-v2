@@ -180,6 +180,17 @@ const userGetLearning =async (useremail: string, idLearning: number) => {
     throw new ResponseError(404, 'Learning Path tidak ditemukan')
   }
 
+  const cekUserLearning = await prismaClient.userhaslearning.count({
+    where: {
+      useremail: Useremail,
+      learningId: IdLearning
+    }
+  })
+
+  if(cekUserLearning >= 1){
+    throw new ResponseError(401, 'Learning path sudah diambil')
+  }
+
   return prismaClient.userhaslearning.create({
     data: {
       useremail: Useremail,
@@ -208,15 +219,23 @@ const updateSkorLearningPath = async (useremail: string, idLearning: number, sko
     throw new ResponseError(404, 'Learning path tidak ada')
   }
 
-  return prismaClient.userhaslearning.update({
+  await prismaClient.userhaslearning.updateMany({
     where: {
-      useremail: Useremail,
-      learningId: IdLearning
+      AND: [
+        {
+          useremail: Useremail
+        },
+        {
+          learningId: IdLearning
+        }
+      ]
     },
     data: {
       skor: skorUser
     }
   })
+
+  return "Skor telah diupdate"
 }
 
 const userAddFeedback = async (username: string, note: string) => {

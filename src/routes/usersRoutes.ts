@@ -29,8 +29,95 @@ userRoutes.use(authMiddleware)
  * @swagger
  * tags:
  *   name: Users
- *   description: The User API
+ *   description: The Users Routes
  */
+
+/**
+ * tags:
+ *   name: Learning
+ *   description: The Learning Path
+ */
+
+/**
+ * @swagger
+ *  /brandbiz/user:
+ *    get:
+ *      summary : Get User by Token
+ *      tags : [Users]
+ *      parameters:
+ *         - in: header
+ *           name: Authorization
+ *           schema:
+ *           type: string
+ *           required: true
+ *           description: A token string
+ *      responses:
+ *        "200":
+ *          description: SUCCESS
+ *          content: 
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/GetUserByIdResponse'
+ *        "401":
+ *          description: Unauthorization User
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/UnauthorizedResponse'
+ *    put:
+ *      summary : Update User by Token
+ *      tags : [Users]
+ *      parameters:
+ *         - in: header
+ *           name: Authorization
+ *           schema:
+ *           type: string
+ *           required: true
+ *           description: A token string
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          multipart/form-data:
+ *            schema:
+ *              $ref: '#/components/schemas/UpdateUsersValidation'
+ *      responses:
+ *        "200":
+ *          description: Update User data
+ *          content: 
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/UpdateUserByIdResponse'
+ *        "401":
+ *          description: Unauthorization User
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/UnauthorizedResponse'
+ *    delete:
+ *      summary : Logout User by Token
+ *      tags : [Users]
+ *      parameters:
+ *         - in: header
+ *           name: Authorization
+ *           schema:
+ *           type: string
+ *           required: true
+ *           description: A token string
+ *      responses:
+ *        "200":
+ *          description: Update User data
+ *          content: 
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/LogoutResponse'
+ *        "401":
+ *          description: Unauthorization User
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/UnauthorizedResponse'
+ */
+
 
 
 // users Route
@@ -38,6 +125,35 @@ userRoutes.route('/brandbiz/user')
   .get(controlUser.getUserByUsernameHandler)
   .put(upload.single('profileUrl'), controlUser.updateUserHandler)
   .delete(controlUser.logoutUserHandler)
+
+
+/**
+ * @swagger
+ *  /brandbiz/user/{idLearningPath}:
+ *    get:
+ *      summary : User get Learning Path
+ *      tags : [Learning]
+ *      parameters:
+ *         - in: header
+ *           name: Authorization
+ *           schema:
+ *           type: string
+ *           required: true
+ *           description: A token string
+ *      responses:
+ *        "200":
+ *          description: SUCCESS
+ *          content: 
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/usergetlearning'
+ *        "401":
+ *          description: Unauthorization User
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/UnauthorizedResponse'
+ */
 
 userRoutes.route('/brandbiz/user/:idLearning').post(controlUser.usergetlearningHandler)
 userRoutes.route('/brandbiz/user/learning/:idLearning/skor/:skor').put(controlUser.userUpdateSkor)

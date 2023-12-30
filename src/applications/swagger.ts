@@ -8,9 +8,21 @@ const options: swaggerJsdoc.Options = {
       info: {
         title: "BrandBiz Rest API",
         version: "1.0.0",
+        description: "Rest Api for Brandbiz website",
+        contact: {
+          author: "Bayu Dwi Satriyo",
+          email: "bayudsatriyo@gmail.com",
+          github: "github.com/bayudsatriyo"
+        },
       },
+      servers: [
+        {
+          url: "http://localhost:8080",
+          description: 'Development server'
+        },
+      ],
     },
-    apis: ["./src/routes/*ts"],
+    apis: ["./src/routes/*ts", "./src/validations/*ts"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
@@ -25,7 +37,7 @@ function swaggerDocs(app: Express) {
       res.send(swaggerSpec);
     });
   
-    console.info(`Docs available at http://localhost:8080/docs`);
+    console.info(`Docs available at http://localhost:8080`);
   }
   
 export default swaggerDocs;
