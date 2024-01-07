@@ -1,6 +1,6 @@
 FROM node:18.15
 
-WORKDIR /usr/scr/brandbiz-api
+WORKDIR /
 
 COPY . .
 
