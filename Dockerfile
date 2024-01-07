@@ -1,6 +1,6 @@
 FROM node:18.15
 
-WORKDIR /
+WORKDIR /dist
 
 COPY . .
 
@@ -8,4 +8,4 @@ RUN npm install
 
 EXPOSE 8080
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
