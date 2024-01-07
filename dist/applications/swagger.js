@@ -15,13 +15,13 @@ const options = {
             contact: {
                 author: "Bayu Dwi Satriyo",
                 email: "bayudsatriyo@gmail.com",
-                github: "github.com/bayudsatriyo"
+                github: "github.com/bayudsatriyo",
             },
         },
         servers: [
             {
-                url: "http://localhost:8080",
-                description: 'Development server'
+                url: "https://brandbiz-api-v2-production.up.railway.app",
+                description: "Development server",
             },
         ],
     },
