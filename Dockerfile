@@ -2,7 +2,7 @@
 FROM node:v18.15.0
 
 # Set direktori kerja di dalam container
-WORKDIR /app
+WORKDIR /dist
 
 # Salin package.json dan package-lock.json ke direktori kerja
 COPY package* ./
