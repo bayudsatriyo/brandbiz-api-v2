@@ -36,6 +36,6 @@ function swaggerDocs(app) {
         res.setHeader("Content-Type", "application/json");
         res.send(swaggerSpec);
     });
-    console.info(`Docs available at http://localhost:8080`);
+    console.info(`Docs available at https://brandbiz-api-v2-production.up.railway.app/docs`);
 }
 exports.default = swaggerDocs;
