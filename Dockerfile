@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose container port
-EXPOSE 5000
+EXPOSE 8080
 
 # Perintah untuk menjalankan aplikasi ketika container dijalankan
 CMD ["npm", "run", "start"]
