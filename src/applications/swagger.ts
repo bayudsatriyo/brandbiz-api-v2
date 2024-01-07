@@ -37,7 +37,9 @@ function swaggerDocs(app: Express) {
     res.send(swaggerSpec);
   });
 
-  console.info(`Docs available at http://localhost:8080`);
+  console.info(
+    `Docs available at https://brandbiz-api-v2-production.up.railway.app/docs`
+  );
 }
 
 export default swaggerDocs;
